@@ -7,7 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +28,7 @@ public class Usuario {
     private String senha;
 
     @NotNull
-    @Past
+    @PastOrPresent
     private LocalDateTime dataHoraCadastro;
 
     public Usuario(@Email @NotBlank String login, @NotBlank @Length(min = 6) String senha) {

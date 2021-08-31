@@ -1,6 +1,7 @@
 package br.com.zupacademy.fabio.ecommerce.controller.form;
 
 import br.com.zupacademy.fabio.ecommerce.entity.Usuario;
+import br.com.zupacademy.fabio.ecommerce.validator.UniqueValue;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -10,6 +11,7 @@ public class UsuarioForm {
 
     @Email
     @NotBlank
+    @UniqueValue(domainClass = Usuario.class, fieldName = "login")
     private String login;
 
     @NotBlank
