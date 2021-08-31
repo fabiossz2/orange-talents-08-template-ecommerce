@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/orange-talents-08-template-ecommerce.iml" filepath="$PROJECT_DIR$/.idea/orange-talents-08-template-ecommerce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ecommerce.iml" filepath="$PROJECT_DIR$/ecommerce.iml" />
     </modules>
   </component>
 </project>
