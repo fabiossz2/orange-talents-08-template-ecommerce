@@ -37,7 +37,7 @@ public class Usuario implements UserDetails {
     private LocalDateTime dataHoraCadastro;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Roles> perfils = new ArrayList<>();
+    private List<Role> perfils = new ArrayList<>();
 
     @Deprecated
     protected Usuario() {

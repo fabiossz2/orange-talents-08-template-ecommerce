@@ -4,19 +4,22 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 
 @Entity
-public class Roles implements GrantedAuthority {
+public class Role implements GrantedAuthority {
+
+    public static final Role ROLE_ADMIN = new Role("ROLE_ADMIN");
 
     @Id
     private String authority;
 
     @Deprecated
-    public Roles() {
+    public Role() {
     }
 
-    public Roles(String authority) {
+    public Role(String authority) {
         this.authority = authority;
     }
 
@@ -27,5 +30,13 @@ public class Roles implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return this.authority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(authority, role.authority);
     }
 }

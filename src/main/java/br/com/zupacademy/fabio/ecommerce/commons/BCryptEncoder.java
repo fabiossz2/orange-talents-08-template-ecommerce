@@ -1,4 +1,4 @@
-package br.com.zupacademy.fabio.ecommerce.commons.util;
+package br.com.zupacademy.fabio.ecommerce.commons;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
