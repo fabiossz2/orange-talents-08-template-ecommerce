@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -94,4 +95,12 @@ public class CustomExceptionHandler {
         return new StandardError(LocalDateTime.now(), HttpStatus.FORBIDDEN.value(),
                 HttpStatus.FORBIDDEN.toString(), exception.getMessage());
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public StandardError handleConstraintViolationException(ConstraintViolationException exception) {
+        return new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.toString(), exception.getMessage());
+    }
+
 }
