@@ -1,6 +1,5 @@
 package br.com.zupacademy.fabio.ecommerce.controller.form;
 
-import br.com.zupacademy.fabio.ecommerce.config.security.TokenService;
 import br.com.zupacademy.fabio.ecommerce.entity.Categoria;
 import br.com.zupacademy.fabio.ecommerce.entity.Produto;
 import br.com.zupacademy.fabio.ecommerce.entity.Usuario;
@@ -8,6 +7,7 @@ import br.com.zupacademy.fabio.ecommerce.repository.CategoriaRepository;
 import br.com.zupacademy.fabio.ecommerce.repository.ProdutoRepository;
 import br.com.zupacademy.fabio.ecommerce.repository.UsuarioRepository;
 import br.com.zupacademy.fabio.ecommerce.validator.ExistsId;
+import br.com.zupacademy.fabio.ecommerce.validator.UniqueValue;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.util.Assert;
 
@@ -22,6 +22,7 @@ import java.util.*;
 public class ProdutoForm {
 
     @NotBlank
+    @UniqueValue(domainClass = Produto.class, fieldName = "nome")
     private String nome;
 
     @NotNull
@@ -60,18 +61,11 @@ public class ProdutoForm {
     }
 
     public Produto converterProduto(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository,
-                                    UsuarioRepository usuarioRepository, TokenService tokenService,
-                                    @NotBlank String token) {
-        String tokenBearer = token.substring(7, token.length());
-        Long idUsuario = tokenService.getIdUsuario(tokenBearer);
+                                    UsuarioRepository usuarioRepository, @NotNull Usuario user) {
 
-        if(idUsuario == null){
-            throw new IllegalStateException("Token do usuário inválido");
-        }
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(user.getId());
 
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
-
-        Assert.state(usuarioOptional.isPresent(), "Usuário Logado Inválido");
+        Assert.state(usuarioOptional.isPresent(), "Usuário Inválido");
 
         Optional<Categoria> categoriaOptional = categoriaRepository.findById(idCategoria);
 
@@ -80,7 +74,6 @@ public class ProdutoForm {
         return new Produto(nome, valor, quantidade, descricao, categoriaOptional.get(), this.caracteristicas,
                 usuarioOptional.get());
     }
-
 
     public boolean hasCaracteristicasIguais() {
         HashSet<String> nomesIguais = new HashSet<>();
