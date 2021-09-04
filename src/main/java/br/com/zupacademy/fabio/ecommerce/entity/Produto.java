@@ -110,6 +110,10 @@ public class Produto {
         return categoria;
     }
 
+    public Usuario getDono() {
+        return dono;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

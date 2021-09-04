@@ -13,4 +13,6 @@ public interface ProdutoRepository extends CrudRepository<Produto, Long> {
 
     @Query("from Produto p inner join p.dono d where p.id = :idProduto and d.id = :idDonoProd")
     Optional<Produto> findProdutoByUser(@Param("idProduto")Long idProduto, @Param("idDonoProd") Long idDonoProd);
+
+    Produto findProdutoById(Long idProduto);
 }
