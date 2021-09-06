@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -41,7 +42,7 @@ public class Produto {
     private Set<CaracteristicasProduto> caracteristicas = new HashSet<>();
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
-    private List<ImagemProduto> imagens = new ArrayList<>();
+    private Set<ImagemProduto> imagens = new HashSet<>();
 
     @Column(nullable = false, length = 1000)
     @NotBlank
@@ -59,6 +60,14 @@ public class Produto {
     @NotNull
     @Valid
     private Usuario dono;
+
+    @OneToMany(mappedBy = "produto")
+    @OrderBy("titulo asc")
+    private SortedSet<PerguntaProduto> perguntas = new TreeSet<>();
+
+    @OneToMany(mappedBy = "produto")
+    private Set<OpiniaoProduto> opinioes = new HashSet<>();
+
 
     @Deprecated
     protected Produto() {
@@ -113,6 +122,19 @@ public class Produto {
     public Usuario getDono() {
         return dono;
     }
+
+    public <T> Set<T> mapeiaImagens(Function<ImagemProduto, T> funcaoMapeadora) {
+        return this.imagens.stream().map(funcaoMapeadora).collect(Collectors.toSet());
+    }
+
+    public <T extends Comparable<T>> SortedSet<T> mapeiaPerguntas(Function<PerguntaProduto, T> funcaoMapeadora) {
+        return this.perguntas.stream().map(funcaoMapeadora).collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    public <T> Set<T> mapeiaOpinioes(Function<OpiniaoProduto, T> funcaoMapeadora) {
+        return this.opinioes.stream().map(funcaoMapeadora).collect(Collectors.toSet());
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -81,7 +81,7 @@ public class ProdutoController {
         return new OpiniaoDto(opiniao);
     }
 
-    @Transactional
+
     @PostMapping("/{id}/perguntas")
     public PerguntaDto perguntaSobreOProduto(@Valid @RequestBody PerguntaProdutoForm form,
                                              @PathVariable(name = "id")
@@ -92,5 +92,12 @@ public class ProdutoController {
         final String emailVendedor = dono.getUsername();
         this.mercadoLivreMailProcessorService.execute(pergunta, emailVendedor);
         return new PerguntaDto(pergunta);
+    }
+
+    @GetMapping("/{id}")
+    public DetalhesProdutoDto detalhesProduto(@PathVariable(name = "id")
+                                              @ExistsId(domainClass = Produto.class, fieldName = "id") Long idProduto) {
+        final Produto produto = this.produtoRepository.findProdutoById(idProduto);
+        return new DetalhesProdutoDto(produto);
     }
 }

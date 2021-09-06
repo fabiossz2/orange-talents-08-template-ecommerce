@@ -40,6 +40,6 @@ public class OpiniaoProdutoForm {
         Optional<Produto> produtoOptional = produtoRepository.findProdutoByUser(idProduto, user.getId());
         if (!produtoOptional.isPresent())
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "O produto não pertence ao usuário");
-        return new OpiniaoProduto(nota,titulo,descricao, produtoOptional.get());
+        return new OpiniaoProduto(nota,titulo,descricao, produtoOptional.get(), user);
     }
 }
