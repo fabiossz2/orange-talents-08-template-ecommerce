@@ -1,6 +1,6 @@
 package br.com.zupacademy.fabio.ecommerce.controller;
 
-import br.com.zupacademy.fabio.ecommerce.commons.MercadoLivreMailProcessorService;
+import br.com.zupacademy.fabio.ecommerce.commons.email.MlSendMailPergunta;
 import br.com.zupacademy.fabio.ecommerce.config.security.TokenService;
 import br.com.zupacademy.fabio.ecommerce.controller.dto.*;
 import br.com.zupacademy.fabio.ecommerce.controller.form.ImagemProdutoRequest;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/produtos")
@@ -31,19 +32,19 @@ public class ProdutoController {
     private final ImagemRepository imagemRepository;
     private final OpiniaoRepository opiniaoRepository;
     private final PerguntaRepository perguntaRepository;
-    private final MercadoLivreMailProcessorService mercadoLivreMailProcessorService;
+    private final MlSendMailPergunta mlSendMailPergunta;
     private final Uploader uploader;
 
     public ProdutoController(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository,
                              UsuarioRepository usuarioRepository, TokenService tokenService, ImagemRepository imagemRepository,
-                             OpiniaoRepository opiniaoRepository, PerguntaRepository perguntaRepository, MercadoLivreMailProcessorService mercadoLivreMailProcessorService, Uploader uploader) {
+                             OpiniaoRepository opiniaoRepository, PerguntaRepository perguntaRepository, MlSendMailPergunta mlSendMailPergunta, Uploader uploader) {
         this.produtoRepository = produtoRepository;
         this.categoriaRepository = categoriaRepository;
         this.usuarioRepository = usuarioRepository;
         this.imagemRepository = imagemRepository;
         this.opiniaoRepository = opiniaoRepository;
         this.perguntaRepository = perguntaRepository;
-        this.mercadoLivreMailProcessorService = mercadoLivreMailProcessorService;
+        this.mlSendMailPergunta = mlSendMailPergunta;
         this.uploader = uploader;
     }
 
@@ -90,7 +91,8 @@ public class ProdutoController {
         PerguntaProduto pergunta = form.realizaPergunta(user, usuarioRepository, produtoRepository, idProduto);
         final Usuario dono = pergunta.getProduto().getDono();
         final String emailVendedor = dono.getUsername();
-        this.mercadoLivreMailProcessorService.execute(pergunta, emailVendedor);
+        this.perguntaRepository.save(pergunta);
+        this.mlSendMailPergunta.enviaEmail(pergunta, emailVendedor);
         return new PerguntaDto(pergunta);
     }
 

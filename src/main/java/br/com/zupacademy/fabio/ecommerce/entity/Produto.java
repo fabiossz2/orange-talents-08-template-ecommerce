@@ -148,4 +148,13 @@ public class Produto {
     public int hashCode() {
         return Objects.hash(nome);
     }
+
+    public boolean abaterEstoque(@Positive int quantidade) {
+        Assert.isTrue(quantidade > 0, "a quantidade deve ser maior que zero para abater o estoque" + quantidade);
+        if(quantidade <= this.quantidade){
+            this.quantidade -= quantidade;
+            return true;
+        }
+        return false;
+    }
 }

@@ -47,6 +47,7 @@ public class OpiniaoProduto {
         this.titulo = titulo;
         this.descricao = descricao;
         this.produto = produto;
+        this.consumidor = consumidor;
     }
 
     public Long getId() {

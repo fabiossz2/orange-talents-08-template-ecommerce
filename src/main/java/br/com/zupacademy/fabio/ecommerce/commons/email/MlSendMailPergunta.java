@@ -1,4 +1,4 @@
-package br.com.zupacademy.fabio.ecommerce.commons;
+package br.com.zupacademy.fabio.ecommerce.commons.email;
 
 import br.com.zupacademy.fabio.ecommerce.entity.PerguntaProduto;
 import org.slf4j.Logger;
@@ -9,25 +9,29 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MercadoLivreMail {
+public class MlSendMailPergunta implements IMercadoLivreMail {
 
-    private static final Logger logger = LoggerFactory.getLogger(MercadoLivreMail.class);
+    private static final Logger logger = LoggerFactory.getLogger(MlSendMailPergunta.class);
 
     private MailSender mailSender;
 
-    public MercadoLivreMail(MailSender mailSender) {
+    public MlSendMailPergunta(MailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    public void enviaEmailNovaPerguntaProduto(PerguntaProduto produto, String emailVendedor) {
+    @Override
+    public <T> boolean enviaEmail(T report, String email) {
+        PerguntaProduto p = (PerguntaProduto) report;
         SimpleMailMessage simpleMessage = new SimpleMailMessage();
-        simpleMessage.setTo(emailVendedor);
-        simpleMessage.setSubject("Nova pergunta para o produto: " + produto.getProduto().getDescricao());
+        simpleMessage.setTo(email);
+        simpleMessage.setSubject("Nova pergunta para o produto: " + p.getProduto().getDescricao());
         simpleMessage.setText("Olá você tem uma nova pergunta para o seu produto");
         try {
             this.mailSender.send(simpleMessage);
+            return true;
         } catch (MailException e) {
-            logger.error("Não foi possível enviar o email para " + emailVendedor);
+            logger.error("Não foi possível enviar o email para " + email);
         }
+        return false;
     }
 }
