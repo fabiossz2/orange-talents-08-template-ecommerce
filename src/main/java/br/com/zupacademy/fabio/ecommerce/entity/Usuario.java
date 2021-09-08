@@ -107,4 +107,11 @@ public class Usuario implements UserDetails {
         Usuario usuario = (Usuario) o;
         return login.equals(usuario.login);
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "login='" + login + '\'' +
+                '}';
+    }
 }

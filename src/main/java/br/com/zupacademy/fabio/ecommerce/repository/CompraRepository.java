@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CompraRepository extends CrudRepository<Compra,Long> {
+    Compra findCompraById(Long idCompra);
 }

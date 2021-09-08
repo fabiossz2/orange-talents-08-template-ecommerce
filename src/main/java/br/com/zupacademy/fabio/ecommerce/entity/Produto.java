@@ -157,4 +157,13 @@ public class Produto {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "nome='" + nome + '\'' +
+                ", valor=" + valor +
+                ", quantidade=" + quantidade +
+                '}';
+    }
 }
